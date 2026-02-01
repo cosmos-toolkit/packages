@@ -1,7 +1,7 @@
 package errors
 
-// ExitCode mapeia erro para código de saída (CLI).
-// 0 = sucesso, 1 = erro genérico, 2 = invalid input, 3 = not found, etc.
+// ExitCode maps error to exit code (CLI).
+// 0 = success, 1 = generic error, 2 = invalid input, 3 = not found, etc.
 func ExitCode(err error) int {
 	if err == nil {
 		return 0

@@ -1,5 +1,5 @@
-// Package config fornece carregamento de env (env, dotenv), validação e defaults.
-// Serve para CLI, cron, API e worker.
+// Package config provides env loading (env, dotenv), validation and defaults.
+// Used by CLI, cron, API and worker.
 package config
 
 import (
@@ -8,13 +8,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Loader carrega variáveis de ambiente. Load() pode ser chamado antes de Parse.
+// Loader loads environment variables. Load() can be called before Parse.
 type Loader struct {
 	loaded bool
 }
 
-// LoadFromFiles carrega arquivos .env (ex.: .env, .env.local).
-// Se nenhum arquivo for passado, não faz nada. Erros de arquivo inexistente são ignorados.
+// LoadFromFiles loads .env files (e.g. .env, .env.local).
+// If no files are passed, does nothing. Missing file errors are ignored.
 func (l *Loader) LoadFromFiles(filenames ...string) error {
 	if len(filenames) == 0 {
 		return nil
@@ -26,13 +26,13 @@ func (l *Loader) LoadFromFiles(filenames ...string) error {
 	return nil
 }
 
-// LoadFromFiles é um helper que carrega .env e retorna erro.
+// LoadFromFiles is a helper that loads .env and returns an error.
 func LoadFromFiles(filenames ...string) error {
 	var loader Loader
 	return loader.LoadFromFiles(filenames...)
 }
 
-// Get retorna a variável de ambiente ou o valor default.
+// Get returns the environment variable or the default value.
 func Get(key, defaultVal string) string {
 	if v := os.Getenv(key); v != "" {
 		return v
@@ -40,7 +40,7 @@ func Get(key, defaultVal string) string {
 	return defaultVal
 }
 
-// MustGet retorna a variável de ambiente ou panics se vazia.
+// MustGet returns the environment variable or panics if empty.
 func MustGet(key string) string {
 	if v := os.Getenv(key); v != "" {
 		return v

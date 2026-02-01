@@ -1,5 +1,5 @@
-// Package logger: helpers de contexto re-exportam contextx para conveniência.
-// Para definir trace_id/request_id no contexto, use contextx.WithTraceID etc.
+// Package logger: context helpers re-export contextx for convenience.
+// To set trace_id/request_id in context, use contextx.WithTraceID etc.
 package logger
 
 import (
@@ -8,11 +8,11 @@ import (
 	"github.com/cosmos-toolkit/pkgs/pkg/contextx"
 )
 
-// TraceID retorna o trace_id do contexto (delega para contextx).
+// TraceID returns the trace_id from context (delegates to contextx).
 func TraceID(ctx context.Context) string { return contextx.TraceID(ctx) }
 
-// RequestID retorna o request_id do contexto (delega para contextx).
+// RequestID returns the request_id from context (delegates to contextx).
 func RequestID(ctx context.Context) string { return contextx.RequestID(ctx) }
 
-// UserID retorna o user_id do contexto (delega para contextx).
+// UserID returns the user_id from context (delegates to contextx).
 func UserID(ctx context.Context) string { return contextx.UserID(ctx) }

@@ -1,5 +1,5 @@
-// Package logger fornece um wrapper sobre slog com suporte a contexto
-// (trace_id, request_id) e modos CLI / API / Worker.
+// Package logger provides a slog wrapper with context support
+// (trace_id, request_id) and CLI / API / Worker modes.
 package logger
 
 import (
@@ -10,33 +10,33 @@ import (
 	"github.com/cosmos-toolkit/pkgs/pkg/contextx"
 )
 
-// Mode define o formato de saída do logger.
+// Mode defines the logger output format.
 type Mode string
 
 const (
-	ModeCLI    Mode = "cli"    // humano, texto
-	ModeAPI    Mode = "api"    // JSON, para HTTP
-	ModeWorker Mode = "worker" // JSON, para jobs
+	ModeCLI    Mode = "cli"    // human-readable text
+	ModeAPI    Mode = "api"    // JSON for HTTP
+	ModeWorker Mode = "worker" // JSON for jobs
 )
 
-// Logger encapsula slog com campos de contexto e modo.
+// Logger wraps slog with context fields and mode.
 type Logger struct {
 	*slog.Logger
 	mode Mode
 }
 
-// Config configura o logger.
+// Config configures the logger.
 type Config struct {
 	Mode  Mode
 	Level slog.Level
 }
 
-// DefaultConfig retorna configuração padrão (API, Info).
+// DefaultConfig returns default configuration (API, Info).
 func DefaultConfig() Config {
 	return Config{Mode: ModeAPI, Level: slog.LevelInfo}
 }
 
-// New cria um logger com a configuração dada.
+// New creates a logger with the given configuration.
 func New(cfg Config) *Logger {
 	var handler slog.Handler
 	opts := &slog.HandlerOptions{Level: cfg.Level}
@@ -48,8 +48,8 @@ func New(cfg Config) *Logger {
 	return &Logger{Logger: slog.New(handler), mode: cfg.Mode}
 }
 
-// WithContext retorna um logger que inclui trace_id, request_id e user_id
-// do contexto (via contextx), quando presentes.
+// WithContext returns a logger that includes trace_id, request_id and user_id
+// from the context (via contextx) when present.
 func (l *Logger) WithContext(ctx context.Context) *slog.Logger {
 	if ctx == nil {
 		return l.Logger
@@ -67,5 +67,5 @@ func (l *Logger) WithContext(ctx context.Context) *slog.Logger {
 	return logger
 }
 
-// Mode retorna o modo do logger.
+// Mode returns the logger mode.
 func (l *Logger) Mode() Mode { return l.mode }

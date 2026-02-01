@@ -1,5 +1,5 @@
-// Package validator fornece um wrapper do go-playground/validator/v10:
-// validação de structs, mensagens padronizadas e reuso entre API e CLI.
+// Package validator provides a wrapper for go-playground/validator/v10:
+// struct validation, standardized messages, and reuse between API and CLI.
 package validator
 
 import (
@@ -9,10 +9,10 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// V é o validador compartilhado.
+// V is the shared validator instance.
 var V = validator.New()
 
-// Validate valida a struct v e retorna erro com mensagens amigáveis.
+// Validate validates struct v and returns an error with user-friendly messages.
 func Validate(v interface{}) error {
 	if err := V.Struct(v); err != nil {
 		return Translate(err)
@@ -20,7 +20,7 @@ func Validate(v interface{}) error {
 	return nil
 }
 
-// Translate converte erros do validator em mensagens padronizadas.
+// Translate converts validator errors into standardized messages.
 func Translate(err error) error {
 	if err == nil {
 		return nil
@@ -33,26 +33,26 @@ func Translate(err error) error {
 	for _, e := range errs {
 		msgs = append(msgs, fieldError(e))
 	}
-	return fmt.Errorf("validação: %s", strings.Join(msgs, "; "))
+	return fmt.Errorf("validation: %s", strings.Join(msgs, "; "))
 }
 
 func fieldError(e validator.FieldError) string {
 	field := e.Field()
-	// snake_case para API
+	// snake_case for API
 	name := toSnake(field)
 	switch e.Tag() {
 	case "required":
-		return name + " é obrigatório"
+		return name + " is required"
 	case "email":
-		return name + " deve ser um e-mail válido"
+		return name + " must be a valid email"
 	case "min":
-		return name + " deve ter no mínimo " + e.Param() + " caracteres"
+		return name + " must have at least " + e.Param() + " characters"
 	case "max":
-		return name + " deve ter no máximo " + e.Param() + " caracteres"
+		return name + " must have at most " + e.Param() + " characters"
 	case "oneof":
-		return name + " deve ser um de: " + e.Param()
+		return name + " must be one of: " + e.Param()
 	default:
-		return name + " é inválido (" + e.Tag() + ")"
+		return name + " is invalid (" + e.Tag() + ")"
 	}
 }
 

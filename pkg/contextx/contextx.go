@@ -1,5 +1,5 @@
-// Package contextx fornece helpers para context.Context: timeout padrão,
-// metadata (tenant, trace, user) e cancelamento em cascata.
+// Package contextx provides helpers for context.Context: default timeout,
+// metadata (tenant, trace, user) and cascade cancellation.
 package contextx
 
 import (
@@ -16,10 +16,10 @@ const (
 	keyTenantID
 )
 
-// DefaultTimeout é o timeout padrão para operações (ex.: HTTP, DB).
+// DefaultTimeout is the default timeout for operations (e.g. HTTP, DB).
 const DefaultTimeout = 30 * time.Second
 
-// WithTimeout retorna um contexto com timeout; usa DefaultTimeout se d <= 0.
+// WithTimeout returns a context with timeout; uses DefaultTimeout if d <= 0.
 func WithTimeout(ctx context.Context, d time.Duration) (context.Context, context.CancelFunc) {
 	if d <= 0 {
 		d = DefaultTimeout
@@ -27,12 +27,12 @@ func WithTimeout(ctx context.Context, d time.Duration) (context.Context, context
 	return context.WithTimeout(ctx, d)
 }
 
-// WithTraceID coloca trace_id no contexto.
+// WithTraceID sets trace_id in the context.
 func WithTraceID(ctx context.Context, id string) context.Context {
 	return context.WithValue(ctx, keyTraceID, id)
 }
 
-// TraceID retorna o trace_id do contexto.
+// TraceID returns the trace_id from the context.
 func TraceID(ctx context.Context) string {
 	v := ctx.Value(keyTraceID)
 	if s, ok := v.(string); ok {
@@ -41,12 +41,12 @@ func TraceID(ctx context.Context) string {
 	return ""
 }
 
-// WithRequestID coloca request_id no contexto.
+// WithRequestID sets request_id in the context.
 func WithRequestID(ctx context.Context, id string) context.Context {
 	return context.WithValue(ctx, keyRequestID, id)
 }
 
-// RequestID retorna o request_id do contexto.
+// RequestID returns the request_id from the context.
 func RequestID(ctx context.Context) string {
 	v := ctx.Value(keyRequestID)
 	if s, ok := v.(string); ok {
@@ -55,12 +55,12 @@ func RequestID(ctx context.Context) string {
 	return ""
 }
 
-// WithUserID coloca user_id no contexto.
+// WithUserID sets user_id in the context.
 func WithUserID(ctx context.Context, id string) context.Context {
 	return context.WithValue(ctx, keyUserID, id)
 }
 
-// UserID retorna o user_id do contexto.
+// UserID returns the user_id from the context.
 func UserID(ctx context.Context) string {
 	v := ctx.Value(keyUserID)
 	if s, ok := v.(string); ok {
@@ -69,12 +69,12 @@ func UserID(ctx context.Context) string {
 	return ""
 }
 
-// WithTenant coloca tenant_id no contexto.
+// WithTenant sets tenant_id in the context.
 func WithTenant(ctx context.Context, tenantID string) context.Context {
 	return context.WithValue(ctx, keyTenantID, tenantID)
 }
 
-// Tenant retorna o tenant_id do contexto.
+// Tenant returns the tenant_id from the context.
 func Tenant(ctx context.Context) string {
 	v := ctx.Value(keyTenantID)
 	if s, ok := v.(string); ok {

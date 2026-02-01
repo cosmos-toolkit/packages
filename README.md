@@ -49,7 +49,9 @@ go mod tidy
 
 ---
 
-## Núcleo transversal (disponível)
+## Pacotes disponíveis
+
+### Núcleo transversal
 
 | Pacote        | Descrição                                                                                       |
 | ------------- | ----------------------------------------------------------------------------------------------- |
@@ -58,6 +60,39 @@ go mod tidy
 | **errors**    | Erros tipados, Is/As, mapeamento para HTTP / exit code / retry, stack opcional.                 |
 | **contextx**  | Helpers para context: timeout padrão, metadata (tenant, trace, user), cancelamento.             |
 | **validator** | Wrapper validator/v10, mensagens padronizadas, reuso API/CLI.                                   |
+| **clock**     | Abstração de tempo (Clock interface + Real/Fake). Facilita testes.                              |
+| **retry**     | Retry com backoff exponencial, jitter e max attempts.                                           |
+| **testkit**   | NopLogger, ContextWithIDs. Helpers para testes.                                                 |
+| **cli**       | Exit codes padronizados (ExitOK, ExitErr, …). Uso com pkg/errors.ExitCode.                      |
+
+### APIs / HTTP
+
+| Pacote    | Descrição                                                |
+| --------- | -------------------------------------------------------- |
+| **httpx** | Server bootstrap, graceful shutdown, healthcheck padrão. |
+
+### Workers / Jobs / Crons
+
+| Pacote     | Descrição                                                                               |
+| ---------- | --------------------------------------------------------------------------------------- |
+| **worker** | Worker pool, concurrency configurável, retry (base para SQS, cron, fila).               |
+| **queue**  | Interface Publish/Consume + implementação in-memory (SQS/Rabbit podem ser adicionados). |
+| **cron**   | Wrapper robfig/cron para agendamento de jobs.                                           |
+| **outbox** | Padrão outbox: persist + publish (event-driven).                                        |
+
+### Persistência / Infra
+
+| Pacote    | Descrição                                                                 |
+| --------- | ------------------------------------------------------------------------- |
+| **db**    | Bootstrap DB, pool, healthcheck (driver importado pelo usuário).          |
+| **cache** | Interface Get/Set/Delete + in-memory com TTL (Redis pode ser adicionado). |
+
+### Observabilidade
+
+| Pacote      | Descrição                                                      |
+| ----------- | -------------------------------------------------------------- |
+| **metrics** | Helpers Prometheus: Counter, Histogram, Handler para /metrics. |
+| **tracing** | Wrapper OpenTelemetry: Tracer, StartSpan, context propagation. |
 
 ---
 
@@ -72,13 +107,12 @@ Define, por pacote, dependências usadas pelo Cosmos CLI:
 
 ## Roadmap (evoluir conforme necessidade)
 
-- **APIs:** httpx, httperrors, router, auth, pagination
-- **Workers:** worker, queue, cron, retry, idempotency
-- **Domínio:** result, mapper, clock, uuid
-- **Infra:** db, tx, cache, outbox
-- **Observabilidade:** metrics, tracing, health
-- **CLI:** cli, prompt, output
-- **Testes:** testkit, fixture
+- **APIs:** httperrors, router, auth, pagination
+- **Workers:** idempotency
+- **Domínio:** result, mapper, uuid
+- **Infra:** tx, health
+- **CLI:** prompt, output (wrapper Cobra)
+- **Testes:** fixture
 
 ---
 
@@ -90,5 +124,18 @@ pkg/
 ├── config/    # env + validação
 ├── errors/    # tipados + HTTP/exit/retry
 ├── contextx/  # timeout + metadata
-└── validator/ # go-playground validator
+├── validator/ # go-playground validator
+├── clock/     # abstração de tempo (Real/Fake)
+├── retry/     # backoff + jitter + max attempts
+├── testkit/   # NopLogger, ContextWithIDs
+├── cli/       # exit codes padronizados
+├── httpx/     # server + graceful shutdown + health
+├── worker/    # worker pool + retry
+├── queue/     # interface + in-memory
+├── cron/      # scheduler (robfig/cron)
+├── db/        # pool + healthcheck
+├── cache/     # interface + in-memory
+├── metrics/   # Prometheus helpers
+├── tracing/   # OpenTelemetry wrapper
+└── outbox/    # persist + publish
 ```

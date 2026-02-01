@@ -2,7 +2,7 @@ package errors
 
 import "net/http"
 
-// HTTPStatus mapeia código do erro para status HTTP.
+// HTTPStatus maps error code to HTTP status.
 func HTTPStatus(err error) int {
 	if err == nil {
 		return http.StatusOK

@@ -1,6 +1,6 @@
 package errors
 
-// Retryable indica se o erro é tipicamente retentável (backoff, retry).
+// Retryable indicates whether the error is typically retriable (backoff, retry).
 func Retryable(err error) bool {
 	if err == nil {
 		return false

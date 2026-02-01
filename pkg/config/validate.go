@@ -7,17 +7,17 @@ import (
 	"strings"
 )
 
-// Validator valida structs com tags "env" e "required" ou "default".
-// Uso mínimo: struct com campos string e tag `config:"ENV_KEY,required"` ou `config:"ENV_KEY,default=valor"`.
+// Validator validates structs with "env", "required" or "default" tags.
+// Minimal usage: struct with string fields and tag `config:"ENV_KEY,required"` or `config:"ENV_KEY,default=value"`.
 const tagName = "config"
 
-// Validate preenche defaults e valida campos obrigatórios em v (struct pointer).
-// Tags suportadas: config:"ENV_KEY,required" e config:"ENV_KEY,default=valor".
-// Se um campo tem "required", o valor deve ser não vazio (após preencher do env ou default).
+// Validate fills defaults and validates required fields in v (struct pointer).
+// Supported tags: config:"ENV_KEY,required" and config:"ENV_KEY,default=value".
+// If a field has "required", the value must be non-empty (after filling from env or default).
 func Validate(v interface{}) error {
 	val := reflect.ValueOf(v)
 	if val.Kind() != reflect.Ptr || val.Elem().Kind() != reflect.Struct {
-		return fmt.Errorf("config: Validate espera *struct, obteve %T", v)
+		return fmt.Errorf("config: Validate expects *struct, got %T", v)
 	}
 	val = val.Elem()
 	typ := val.Type()
@@ -57,7 +57,7 @@ func Validate(v interface{}) error {
 			}
 		}
 		if required && current == "" {
-			return fmt.Errorf("config: %s (env %s) é obrigatório", f.Name, envKey)
+			return fmt.Errorf("config: %s (env %s) is required", f.Name, envKey)
 		}
 	}
 	return nil

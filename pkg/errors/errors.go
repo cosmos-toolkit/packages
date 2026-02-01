@@ -1,5 +1,5 @@
-// Package errors fornece erros tipados, Is/As, mapeamento para HTTP/exit code/retry
-// e stack opcional. Evita errors.New espalhado.
+// Package errors provides typed errors, Is/As, mapping for HTTP/exit code/retry
+// and optional stack. Avoids scattered errors.New.
 package errors
 
 import (
@@ -10,7 +10,7 @@ import (
 
 var _ error = (*Error)(nil)
 
-// Error é um erro tipado com código, mensagem e causa.
+// Error is a typed error with code, message and cause.
 type Error struct {
 	Code    string
 	Message string
@@ -18,7 +18,7 @@ type Error struct {
 	Stack   []byte
 }
 
-// Error implementa error.
+// Error implements error.
 func (e *Error) Error() string {
 	if e.Cause != nil {
 		return e.Message + ": " + e.Cause.Error()
@@ -26,10 +26,10 @@ func (e *Error) Error() string {
 	return e.Message
 }
 
-// Unwrap permite errors.Unwrap e errors.Is/As (stdlib).
+// Unwrap allows errors.Unwrap and errors.Is/As (stdlib).
 func (e *Error) Unwrap() error { return e.Cause }
 
-// WithStack grava o stack trace no erro (opcional).
+// WithStack records the stack trace on the error (optional).
 func (e *Error) WithStack() *Error {
 	e.Stack = stack()
 	return e
@@ -41,12 +41,12 @@ func stack() []byte {
 	return buf[:n]
 }
 
-// New cria um erro tipado. Opcional: encadear com Wrap(err) e .WithStack().
+// New creates a typed error. Optional: chain with Wrap(err) and .WithStack().
 func New(code, message string) *Error {
 	return &Error{Code: code, Message: message}
 }
 
-// Wrap envolve um erro com código e mensagem.
+// Wrap wraps an error with code and message.
 func Wrap(err error, code, message string) *Error {
 	if err == nil {
 		return nil
@@ -54,7 +54,7 @@ func Wrap(err error, code, message string) *Error {
 	return &Error{Code: code, Message: message, Cause: err}
 }
 
-// Wrapf envolve com mensagem formatada.
+// Wrapf wraps with a formatted message.
 func Wrapf(err error, code, format string, args ...any) *Error {
 	if err == nil {
 		return nil
@@ -62,13 +62,13 @@ func Wrapf(err error, code, format string, args ...any) *Error {
 	return Wrap(err, code, fmt.Sprintf(format, args...))
 }
 
-// Is delega para errors.Is (stdlib).
+// Is delegates to errors.Is (stdlib).
 func Is(err, target error) bool { return stderrors.Is(err, target) }
 
-// As delega para errors.As (stdlib).
+// As delegates to errors.As (stdlib).
 func As(err error, target any) bool { return stderrors.As(err, target) }
 
-// Códigos comuns para mapeamento HTTP/exit.
+// Common codes for HTTP/exit mapping.
 const (
 	CodeNotFound     = "NOT_FOUND"
 	CodeInvalidInput = "INVALID_INPUT"
@@ -80,7 +80,7 @@ const (
 	CodeTimeout      = "TIMEOUT"
 )
 
-// Sentinels para uso com errors.Is.
+// Sentinels for use with errors.Is.
 var (
 	ErrNotFound     = New(CodeNotFound, "not found")
 	ErrInvalidInput = New(CodeInvalidInput, "invalid input")

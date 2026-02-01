@@ -1,5 +1,5 @@
-# Manifest dos pacotes: copy_deps (pacotes do mesmo repo a copiar junto) e go_get (deps externas).
-# Usado pelo cosmos-cli em "cosmos pkg <name>".
+# Package manifest: copy_deps (packages from this repo to copy together), go_get (external deps).
+# Used by cosmos-cli in "cosmos pkg <name>".
 packages:
   logger:
     copy_deps: [contextx]
@@ -9,3 +9,21 @@ packages:
   errors: {}
   validator:
     go_get: [github.com/go-playground/validator/v10]
+  clock: {}
+  retry: {}
+  testkit:
+    copy_deps: [contextx]
+  cli: {}
+  httpx: {}
+  worker:
+    copy_deps: [retry]
+  queue: {}
+  cron:
+    go_get: [github.com/robfig/cron/v3]
+  db: {}
+  cache: {}
+  metrics:
+    go_get: [github.com/prometheus/client_golang]
+  tracing:
+    go_get: [go.opentelemetry.io/otel, go.opentelemetry.io/otel/trace]
+  outbox: {}
