@@ -1,0 +1,11 @@
+# Manifest dos pacotes: copy_deps (pacotes do mesmo repo a copiar junto) e go_get (deps externas).
+# Usado pelo cosmos-cli em "cosmos pkg <name>".
+packages:
+  logger:
+    copy_deps: [contextx]
+  contextx: {}
+  config:
+    go_get: [github.com/joho/godotenv]
+  errors: {}
+  validator:
+    go_get: [github.com/go-playground/validator/v10]
