@@ -17,7 +17,8 @@ packages:
   httpx: {}
   worker:
     copy_deps: [retry]
-  queue: {}
+  queue:
+    copy_deps: [metrics, tracing]
   cron:
     go_get: [github.com/robfig/cron/v3]
   db: {}
